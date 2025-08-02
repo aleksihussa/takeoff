@@ -18,6 +18,24 @@ setup_zsh_dotfiles() {
   mkdir -p "$HOME/.config/zsh"
   backup_and_symlink "$(pwd)/dotfiles/.zshrc" "$HOME/.zshrc"
   backup_and_symlink "$(pwd)/dotfiles/.p10k.zsh" "$HOME/.p10k.zsh"
+
+  echo "[dotfiles] Verifying Oh My Zsh & plugins..."
+  local omz_dir="$HOME/.oh-my-zsh"
+  local theme_dir="${ZSH_CUSTOM:-$omz_dir/custom}/themes/powerlevel10k"
+  local plugins_dir="${ZSH_CUSTOM:-$omz_dir/custom}/plugins"
+
+  if [ ! -d "$omz_dir" ]; then
+    echo "[WARNING] Oh My Zsh is not installed!"
+  fi
+  if [ ! -d "$theme_dir" ]; then
+    echo "[WARNING] Powerlevel10k theme not found in $theme_dir!"
+  fi
+  if [ ! -d "$plugins_dir/zsh-autosuggestions" ]; then
+    echo "[WARNING] zsh-autosuggestions plugin missing!"
+  fi
+  if [ ! -d "$plugins_dir/zsh-syntax-highlighting" ]; then
+    echo "[WARNING] zsh-syntax-highlighting plugin missing!"
+  fi
 }
 
 setup_neovim() {

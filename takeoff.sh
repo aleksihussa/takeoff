@@ -2,37 +2,29 @@
 
 set -e  # Exit on any error
 
-echo "🚀 Starting Takeoff..."
+# Resolve absolute path to the script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Ensure script is run from its directory
-cd "$(dirname "$0")"
+echo "🚀 Starting Takeoff from $SCRIPT_DIR..."
 
-# Load modules
-if [ -f modules/shell.sh ]; then
-  source modules/shell.sh
-else
-  echo "[error] shell.sh not found!" && exit 1
-fi
+# Load modules dynamically using absolute paths
+for module in shell base-tools dev-tools dotfiles; do
+  MODULE_PATH="$SCRIPT_DIR/modules/$module.sh"
+  if [ -f "$MODULE_PATH" ]; then
+    echo "[Takeoff] Loading $module module..."
+    source "$MODULE_PATH"
+  else
+    echo "[error] $module.sh not found in modules/" && exit 1
+  fi
+done
 
-if [ -f modules/base-tools.sh ]; then
-  source modules/base-tools.sh
-else
-  echo "[error] base-tools.sh not found!" && exit 1
-fi
+echo ""
+echo "✅ All modules loaded successfully!"
+echo ""
 
-if [ -f modules/dev-tools.sh ]; then
-  source modules/dev-tools.sh
-else
-  echo "[error] dev-tools.sh not found!" && exit 1
-fi
-
-if [ -f modules/dotfiles.sh ]; then
-  source modules/dotfiles.sh
-else
-  echo "[error] dotfiles.sh not found!" && exit 1
-fi
-
+# Switch to Zsh if not already running
 if [ "$SHELL" != "$(which zsh)" ]; then
-  echo "Switching to Zsh..."
+  echo "[Takeoff] Switching to Zsh..."
   exec zsh -l
 fi
+

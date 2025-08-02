@@ -144,7 +144,6 @@ run_dev_tools_module() {
   install_zsh_plugins
   install_nvm
   install_sdkman
-  install_homebrew
   build_neovim
   install_lazygit
   build_tmux
